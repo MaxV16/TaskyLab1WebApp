@@ -38,3 +38,10 @@ div {
   font-weight: bold;
   font-size: 1.2em; 
 }
+
+.task-description {
+  font-size: 0.9em;
+  color: #f0f0f0;
+  margin-top: 10px;
+  font-style: italic;
+}

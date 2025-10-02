@@ -17,6 +17,11 @@ function App() {
     tasks[taskIndex].done = !tasks[taskIndex].done;
     setTaskState({tasks});
   }
+  const deleteHandler = (taskIndex) => {
+    const tasks = [...taskState.tasks];
+    tasks.splice(taskIndex, 1);
+    setTaskState({tasks});
+  }
 
 
   return (
@@ -31,6 +36,7 @@ function App() {
       key={task.id}
       done={task.done}
       markDone={() => doneHandler(index)}
+      deleteTask = {() => deleteHandler(index)}
     />
   ))}
     </div>

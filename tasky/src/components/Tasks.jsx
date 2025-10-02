@@ -9,7 +9,7 @@ const Tasks = (props) => {
        <p> Due: {props.deadline}</p>
        {props.description !== "" && <p className="task-description">{props.description}</p>}
        <button onClick={props.markDone} className='doneButton'>Done</button>
-
+       <button className='deleteButton' onClick={props.deleteTask}>Delete</button>
        </div>
        
     )

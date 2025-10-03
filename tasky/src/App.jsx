@@ -9,15 +9,16 @@ import React, { useState } from 'react';
 function App() {
     const [ taskState, setTaskState ] = useState({
     tasks: [
-      { id: 1, title:"Dishes", description: "Empty dishwasher", deadline: "Today", priority: "high" },
-     { id: 2, title: "Laundry", description: "Fold clothes and put away", deadline: "Tomorrow", priority: "medium" },
-     { id: 3, title: "Tidy up", deadline: "Today", priority: "low", done: false }
+      { id: 1, title:"Dishes", description: "Empty dishwasher", deadline: "Today", priority: "High", done: false },
+     { id: 2, title: "Laundry", description: "Fold clothes and put away", deadline: "Tomorrow", priority: "Medium", done: false },
+     { id: 3, title: "Tidy up", deadline: "Today", priority: "Low", done: false }
     ]
   });
   const [ formState, setFormState ] = useState({
     title: "",
     description: "",
-    deadline: ""
+    deadline: "",
+    priority: "Low"
   });
   const doneHandler = (taskIndex) => {
     const tasks = [...taskState.tasks];
@@ -42,6 +43,9 @@ function App() {
       case "deadline":
          form.deadline = event.target.value;
          break;
+      case "priority":
+         form.priority = event.target.value;
+         break;
       default:
          form = formState;
    }
@@ -54,8 +58,8 @@ function App() {
    const form = {...formState};
 
    form.id = uuidv4();
-   
-   tasks.push(form);
+
+   tasks.push({...form, priority: formState.priority});
    setTaskState({tasks});
  }
 

@@ -2,34 +2,41 @@ import { v4 as uuidv4 } from 'uuid';
 import AddTaskForm from './components/Form';
 import './App.css';
 import Task from './components/Tasks';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {getTasks, addTask, deleteTask, updateTask} from "./api/tasky-api";
 
 
 
 function App() {
-    const [ taskState, setTaskState ] = useState({
-    tasks: [
-      { id: 1, title:"Dishes", description: "Empty dishwasher", deadline: "Today", priority: "High", done: false },
-     { id: 2, title: "Laundry", description: "Fold clothes and put away", deadline: "Tomorrow", priority: "Medium", done: false },
-     { id: 3, title: "Tidy up", deadline: "Today", priority: "Low", done: false }
-    ]
-  });
-  const [ formState, setFormState ] = useState({
+  const [ taskState, setTaskState ] = useState({tasks: []});
+
+  useEffect(() => {
+    getTasks().then(tasks => {
+      setTaskState({tasks: tasks});
+    });
+  }, []);
+    const [ formState, setFormState ] = useState({
     title: "",
     description: "",
     deadline: "",
     priority: "Low"
   });
-  const doneHandler = (taskIndex) => {
-    const tasks = [...taskState.tasks];
-    tasks[taskIndex].done = !tasks[taskIndex].done;
-    setTaskState({tasks});
-  }
+
+     const doneHandler = (taskIndex) => {
+      const tasks = [...taskState.tasks];
+      tasks[taskIndex].done = !tasks[taskIndex].done;
+      updateTask(tasks[taskIndex]);
+      setTaskState({tasks});
+    }
+
   const deleteHandler = (taskIndex) => {
     const tasks = [...taskState.tasks];
+    const id=tasks[taskIndex]._id;
     tasks.splice(taskIndex, 1);
+    deleteTask(id);
     setTaskState({tasks});
   }
+
   const formChangeHandler = (event) => {
     let form = {...formState};
 
@@ -51,17 +58,15 @@ function App() {
    }
    setFormState(form);
  }
- const formSubmitHandler = (event) => {
-   event.preventDefault();
+  const formSubmitHandler = async (event) => {
+    event.preventDefault();
+    const tasks = taskState.tasks?[...taskState.tasks]:[];
+    const form = {...formState};
+    const newTask = await addTask(form);
+    tasks.push(newTask);
+    setTaskState({tasks});
+  }
 
-   const tasks = [...taskState.tasks];
-   const form = {...formState};
-
-   form.id = uuidv4();
-
-   tasks.push({...form, priority: formState.priority});
-   setTaskState({tasks});
- }
 
  return (
     <div className="container">
